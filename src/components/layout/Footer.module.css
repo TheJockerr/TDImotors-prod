@@ -1,0 +1,124 @@
+/* src/components/layout/Footer.module.css */
+
+.footer {
+  background: #070a10;
+  border-top: 1px solid var(--color-border);
+  margin-top: auto;
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-block: 56px;
+}
+
+/* Logo */
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.red { color: var(--color-red); }
+
+.tagline {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.socials {
+  display: flex;
+  gap: 8px;
+}
+
+.socialBtn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: var(--color-green-wa);
+  color: #fff;
+  transition: opacity var(--transition-fast);
+}
+
+.socialBtn:hover { opacity: 0.85; }
+
+.socialBtn.ig {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+/* Columnas */
+.col { display: flex; flex-direction: column; gap: 16px; }
+
+.colTitle {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.colList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.colList li,
+.colList a {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.colList a:hover { color: var(--color-text-on-dark); }
+
+.small { font-size: 0.75rem !important; }
+
+/* Bottom bar */
+.bottom {
+  border-top: 1px solid var(--color-border);
+  padding-block: 16px;
+}
+
+.bottom .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8125rem;
+  color: #4a5568;
+}
+
+.bottomRight { color: #4a5568; }
+
+/* Mobile */
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .brand { grid-column: span 2; }
+}
+
+@media (max-width: 520px) {
+  .inner {
+    grid-template-columns: 1fr;
+  }
+
+  .brand { grid-column: span 1; }
+
+  .bottom .container {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}

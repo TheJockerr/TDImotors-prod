@@ -1,0 +1,108 @@
+/* src/pages/Catalogo/Catalogo.module.css */
+
+.main {
+  min-height: 100vh;
+}
+
+.header {
+  background: var(--color-navy);
+  padding-top: calc(var(--nav-height) + 40px);
+  padding-bottom: 40px;
+}
+
+.headerContent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+}
+
+.totalBadge {
+  flex-shrink: 0;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--color-red);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  align-self: flex-start;
+  margin-top: 8px;
+}
+
+/* Grid */
+.grid {
+  background: #f1f5f9;
+  padding-block: 48px;
+  min-height: 60vh;
+}
+
+.carGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Estados */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px;
+  color: var(--color-text-secondary);
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e2e8f0;
+  border-top-color: var(--color-red);
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--color-text-secondary);
+}
+
+.resetBtn {
+  margin-top: 16px;
+  padding: 10px 24px;
+  border-radius: 8px;
+  background: var(--color-red);
+  color: #ffffff;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.resetBtn:hover { opacity: 0.88; }
+
+@media (max-width: 480px) {
+  .carGrid {
+    grid-template-columns: 1fr;
+  }
+}

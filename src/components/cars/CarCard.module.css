@@ -1,0 +1,166 @@
+/* src/components/cars/CarCard.module.css */
+
+.card {
+  background: var(--color-card);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-3px);
+}
+
+/* Imagen */
+.imageWrapper {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f0f4f8;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.card:hover .image {
+  transform: scale(1.03);
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  background: linear-gradient(135deg, #e8edf5, #dde4f0);
+}
+
+/* Badge */
+.badge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 6px 12px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.badgeDark { background: rgba(15, 23, 42, 0.88); }
+.badgeRed { background: var(--color-red); }
+
+/* Body */
+.body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.brand {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-red);
+}
+
+.model {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.year {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 4px;
+}
+
+/* Specs */
+.specs {
+  display: flex;
+  gap: 12px;
+  margin-block: 4px;
+}
+
+.spec {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  flex-shrink: 0;
+}
+
+/* Precio */
+.price {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  margin-top: 8px;
+  letter-spacing: -0.03em;
+}
+
+.currency {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  letter-spacing: 0;
+}
+
+/* Acciones */
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btnWa {
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  background: var(--color-green-wa);
+  color: #ffffff;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.btnWa:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.btnDetail {
+  flex: 1;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: var(--color-navy);
+  color: #ffffff;
+  text-align: center;
+  transition: background var(--transition-fast);
+}
+
+.btnDetail:hover { background: #243040; }
