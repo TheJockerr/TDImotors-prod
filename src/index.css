@@ -103,3 +103,8 @@ button {
   font-weight: 800;
   letter-spacing: -0.03em; /* Urbanist con tracking negativo en títulos grandes queda excelente */
 }
+
+/* Animación spinner global (usada por Suspense PageLoader) */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

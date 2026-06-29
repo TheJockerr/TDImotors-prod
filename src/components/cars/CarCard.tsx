@@ -1,10 +1,12 @@
 // src/components/cars/CarCard.tsx
 import { Link } from 'react-router-dom';
-import type { Car } from '../../types/car';
+import type { CarCard as CarCardType } from '../../types/car';
+import { getCarBadge, getPrimaryImage, getCarSlug } from '../../types/car';
+import { getImageUrl } from '../../lib/supabase';
 import styles from './CarCard.module.css';
 
 interface Props {
-  car: Car;
+  car: CarCardType;
 }
 
 function formatPrice(price: number): string {
@@ -15,7 +17,7 @@ function formatMileage(km: number): string {
   return km.toLocaleString('es-CL') + ' km';
 }
 
-const WHATSAPP_BASE = 'https://wa.me/56940385580?text=';
+const WHATSAPP_BASE = `https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER ?? '56940385580'}?text=`;
 
 export default function CarCard({ car }: Props) {
   const waText = encodeURIComponent(
@@ -23,14 +25,29 @@ export default function CarCard({ car }: Props) {
   );
   const waUrl = WHATSAPP_BASE + waText;
 
-  const hasImage = car.images && car.images.length > 0;
+  // Imagen primaria con transformación WebP (thumbnail para catálogo)
+  const primaryUrl = getPrimaryImage(car.vehicle_images);
+  const thumbnailUrl = getImageUrl(primaryUrl, 'thumbnail');
+  const mediumUrl = getImageUrl(primaryUrl, 'medium');
+  const hasImage = Boolean(primaryUrl);
+
+  // Badge desde flags booleanas
+  const badge = getCarBadge(car);
 
   return (
     <article className={styles.card}>
       {/* Imagen */}
       <div className={styles.imageWrapper}>
         {hasImage ? (
-          <img src={car.images[0]} alt={`${car.brand} ${car.model}`} className={styles.image} loading="lazy" />
+          <img
+            src={thumbnailUrl}
+            srcSet={`${thumbnailUrl} 400w, ${mediumUrl} 800w`}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            alt={`${car.brand} ${car.model} ${car.year}`}
+            className={styles.image}
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
           <div className={styles.imagePlaceholder}>
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -41,10 +58,13 @@ export default function CarCard({ car }: Props) {
             </svg>
           </div>
         )}
-        {car.badge && (
-          <span className={`${styles.badge} ${car.badge === 'OFERTA' ? styles.badgeRed : styles.badgeDark}`}>
-            {car.badge}
+        {badge && (
+          <span className={`${styles.badge} ${badge === 'OFERTA' ? styles.badgeRed : styles.badgeDark}`}>
+            {badge}
           </span>
+        )}
+        {car.status === 'reserved' && (
+          <span className={`${styles.badge} ${styles.badgeReserved}`}>RESERVADO</span>
         )}
       </div>
 
@@ -74,7 +94,7 @@ export default function CarCard({ car }: Props) {
           <a href={waUrl} target="_blank" rel="noopener noreferrer" className={styles.btnWa}>
             WA
           </a>
-          <Link to={`/catalogo/${car.id}`} className={styles.btnDetail}>
+          <Link to={`/vehiculo/${getCarSlug(car)}`} className={styles.btnDetail}>
             Ver más →
           </Link>
         </div>

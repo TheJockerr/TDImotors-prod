@@ -1,8 +1,9 @@
 // src/pages/Home/Home.tsx
 import { Link } from 'react-router-dom';
-import { useCars } from '../../hooks/useCars';
+import { useFeaturedCars } from '../../hooks/useCars';
 import CarCard from '../../components/cars/CarCard';
 import styles from './Home.module.css';
+
 
 const WHATSAPP_NUMBER = '56940385580';
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -40,20 +41,11 @@ const FEATURES = [
 ];
 
 export default function Home() {
-  const { cars, loading, error } = useCars();
+  const { cars: featured, loading } = useFeaturedCars();
 
-  // Autos destacados
-  const featured = cars
-    .filter((c) => c.badge === 'RECIÉN LLEGADO' || c.badge === 'OFERTA')
-    .slice(0, 3);
-
-  // Estados controlados
+  // Estado de carga
   if (loading) {
-    return <div className="container">Cargando...</div>;
-  }
-
-  if (error) {
-    return <div className="container">Error: {error}</div>;
+    return <div className="container" style={{ paddingTop: '120px', minHeight: '60vh' }}>Cargando...</div>;
   }
 
   return (

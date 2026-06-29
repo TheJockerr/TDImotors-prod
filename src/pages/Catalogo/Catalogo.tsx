@@ -6,16 +6,16 @@ import CarFilter, { type FilterState, DEFAULT_FILTERS } from '../../components/c
 import styles from './Catalogo.module.css';
 
 export default function Catalogo() {
-  const { cars, loading } = useCars();
+  const { cars, loading, loadingMore, hasMore, loadMore } = useCars();
   const [filters, setFilters] = useState<FilterState>({ ...DEFAULT_FILTERS });
 
-  // Marcas únicas
+  // Marcas únicas de los vehículos cargados
   const brands = useMemo(() => {
     const set = new Set(cars.map((c) => c.brand));
     return Array.from(set).sort();
   }, [cars]);
 
-  // Aplicar filtros — los valores de texto se convierten a número al comparar
+  // Filtrado en cliente sobre los datos ya paginados
   const filtered = useMemo(() => {
     return cars.filter((car) => {
       if (filters.brand !== 'Todos' && car.brand !== filters.brand) return false;
@@ -81,11 +81,33 @@ export default function Catalogo() {
               </button>
             </div>
           ) : (
-            <div className={styles.carGrid}>
-              {filtered.map((car) => (
-                <CarCard key={car.id} car={car} />
-              ))}
-            </div>
+            <>
+              <div className={styles.carGrid}>
+                {filtered.map((car) => (
+                  <CarCard key={car.id} car={car} />
+                ))}
+              </div>
+
+              {/* Botón "Cargar más" */}
+              {hasMore && (
+                <div className={styles.loadMoreWrapper}>
+                  <button
+                    className={styles.loadMoreBtn}
+                    onClick={loadMore}
+                    disabled={loadingMore}
+                  >
+                    {loadingMore ? (
+                      <>
+                        <span className={styles.loadMoreSpinner} />
+                        Cargando...
+                      </>
+                    ) : (
+                      'Cargar más vehículos'
+                    )}
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>

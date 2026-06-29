@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
 
-const WHATSAPP_NUMBERS = ['+56 9 4038 5580', '+56 9 7737 0010', '+56 9 5219 1321'];
+const WHATSAPP_NUMBERS = ['+56 9 4038 5580'];
 const WHATSAPP_PRIMARY = '56940385580';
 
 export default function Footer() {
@@ -30,7 +30,7 @@ export default function Footer() {
               WhatsApp
             </a>
             <a
-              href="https://www.instagram.com/automotors"
+              href="https://www.instagram.com/tdi_motors"
               target="_blank"
               rel="noopener noreferrer"
               className={`${styles.socialBtn} ${styles.ig}`}
@@ -62,7 +62,7 @@ export default function Footer() {
                 </a>
               </li>
             ))}
-            <li>@tdimotors</li>
+            <li>@tdi_motors</li>
           </ul>
         </div>
 
