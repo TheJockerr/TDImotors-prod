@@ -193,3 +193,31 @@
   padding: 8px 12px;
   border-radius: 6px;
 }
+
+/* ── Responsive: Mobile ─────────────────────────────────── */
+@media (max-width: 640px) {
+
+  /* Área de carga: menos padding */
+  .uploadArea {
+    padding: 20px 16px;
+  }
+
+  /* Grilla: celdas más pequeñas en mobile */
+  .imageGrid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+  }
+
+  /* En touch siempre mostrar los controles (no hay hover) */
+  .overlayControls {
+    opacity: 1;
+    background: rgba(11, 15, 24, 0.55);
+  }
+
+  /* Botones de overlay un poco más grandes para touch */
+  .actionBtn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8125rem;
+  }
+}

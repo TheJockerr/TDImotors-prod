@@ -89,7 +89,7 @@ button {
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
-  padding-inline: var(--container-pad);
+  padding-inline: max(var(--container-pad), env(safe-area-inset-left, var(--container-pad)), env(safe-area-inset-right, var(--container-pad)));
 }
 
 /* Scrollbar sutil */

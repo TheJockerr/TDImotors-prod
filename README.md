@@ -15,7 +15,7 @@ TDI Motors es una plataforma web responsiva optimizada para la venta online de v
 ### Para Administradores (`/admin`)
 * **Acceso Protegido:** Autenticación segura mediante Supabase Auth y políticas RLS.
 * **CRUD de Vehículos:** Permite crear, editar, eliminar y cambiar estados de vehículos (`disponible`, `reservado`, `vendido`).
-* **Gestión de Imágenes:** Subida directa a Supabase Storage (hasta 7 imágenes por auto), marcado de imagen principal y reordenamiento con botones arriba/abajo.
+* **Gestión de Imágenes:** Subida directa a Supabase Storage (hasta 8 imágenes por auto), marcado de imagen principal y reordenamiento con botones arriba/abajo.
 * **Destacados y Promociones:** Toggles para marcar autos como Destacados (home), Recién Llegado, o en Promoción.
 
 ---

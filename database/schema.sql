@@ -58,7 +58,7 @@ CREATE TRIGGER vehicles_updated_at
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
 -- ─── 2. TABLA DE IMÁGENES POR VEHÍCULO ───────────────────────────
--- Separada de vehicles para permitir hasta 7 imágenes por vehículo
+-- Separada de vehicles para permitir hasta 8 imágenes por vehículo
 -- y facilitar reordenamiento y eliminación individual
 CREATE TABLE IF NOT EXISTS vehicle_images (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -73,13 +73,13 @@ CREATE TABLE IF NOT EXISTS vehicle_images (
 CREATE INDEX IF NOT EXISTS idx_vehicle_images_vehicle_id ON vehicle_images(vehicle_id);
 CREATE INDEX IF NOT EXISTS idx_vehicle_images_sort ON vehicle_images(vehicle_id, sort_order);
 
--- Constraint: máximo 7 imágenes por vehículo
+-- Constraint: máximo 8 imágenes por vehículo
 -- (se valida también en la aplicación)
 CREATE OR REPLACE FUNCTION check_max_images()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF (SELECT COUNT(*) FROM vehicle_images WHERE vehicle_id = NEW.vehicle_id) >= 7 THEN
-    RAISE EXCEPTION 'Un vehículo no puede tener más de 7 imágenes';
+  IF (SELECT COUNT(*) FROM vehicle_images WHERE vehicle_id = NEW.vehicle_id) >= 8 THEN
+    RAISE EXCEPTION 'Un vehículo no puede tener más de 8 imágenes';
   END IF;
   RETURN NEW;
 END;

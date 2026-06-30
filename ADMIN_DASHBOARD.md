@@ -69,7 +69,7 @@ Para una administración más segura del inventario, se implementa una confirmac
 
 ## 🖼️ Flujo de Gestión de Imágenes
 
-El componente de imágenes valida la regla de negocio: **mínimo 1 imagen, máximo 7 imágenes por vehículo**.
+El componente de imágenes valida la regla de negocio: **mínimo 1 imagen, máximo 8 imágenes por vehículo**.
 
 ### Subida de Imágenes
 * Arrastra o selecciona archivos haciendo clic en el cuadro punteado.

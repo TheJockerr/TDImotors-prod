@@ -166,3 +166,69 @@
 }
 
 .btnDetail:hover { background: #243040; }
+
+@media (max-width: 640px) {
+  .body {
+    padding: 10px;
+    gap: 2px;
+  }
+
+  .brand {
+    font-size: 0.625rem;
+    letter-spacing: 0.05em;
+  }
+
+  .model {
+    font-size: 0.9375rem;
+    line-height: 1.2;
+  }
+
+  .year {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+  }
+
+  .specs {
+    flex-direction: column;
+    gap: 4px;
+    margin-block: 2px;
+  }
+
+  .spec {
+    font-size: 0.75rem;
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .price {
+    font-size: 1.0625rem;
+    margin-top: 4px;
+  }
+
+  .currency {
+    font-size: 0.75rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  .btnWa,
+  .btnDetail {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .btnWa {
+    justify-content: center;
+  }
+}

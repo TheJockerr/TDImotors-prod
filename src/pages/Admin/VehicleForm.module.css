@@ -45,6 +45,55 @@
   }
 }
 
+/* Sección de imágenes: en desktop ocupa la segunda columna debajo de .rightCol,
+   en mobile siempre va al final debajo de los campos */
+.imagesSection {
+  align-self: start;
+}
+
+/* Desktop: layout explícito para que las imágenes queden pegadas al rightCol */
+@media (min-width: 769px) {
+  .leftCol {
+    grid-column: 1;
+    grid-row: 1 / 3; /* Spans ambas filas en col 1 */
+  }
+
+  .rightCol {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .imagesSection {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+  }
+
+  .formActions {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}
+
+/* Mobile: imágenes al final, ancho completo */
+@media (max-width: 768px) {
+  .leftCol,
+  .rightCol,
+  .imagesSection {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .imagesSection {
+    order: 10;
+  }
+
+  .formActions {
+    grid-column: 1 / -1;
+    order: 11;
+  }
+}
+
 .leftCol, .rightCol {
   display: flex;
   flex-direction: column;
@@ -81,6 +130,28 @@
 @media (max-width: 480px) {
   .gridFields > div {
     grid-column: span 2;
+  }
+
+  .formActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .title {
+    font-size: 1.25rem;
   }
 }
 
@@ -200,7 +271,6 @@
 
 /* Footer / Actions */
 .formActions {
-  grid-column: span 2;
   display: flex;
   justify-content: flex-end;
   gap: 12px;

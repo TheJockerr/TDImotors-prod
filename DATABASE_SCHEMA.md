@@ -8,7 +8,7 @@ Este documento describe la estructura y diseño relacional de las tablas impleme
 
 ```mermaid
 erDiagram
-    vehicles ||--o{ vehicle_images : "tiene 1 a 7"
+    vehicles ||--o{ vehicle_images : "tiene 1 a 8"
     admin_users }|--|| auth_users : "vincula a"
 
     vehicles {
@@ -120,6 +120,6 @@ Para acelerar las búsquedas sobre miles de visitas, se han configurado índices
 
 ## ⚙️ Triggers y Funciones
 * **`vehicles_updated_at`**: Modifica la columna `updated_at` cada vez que se actualiza cualquier campo del vehículo.
-* **`enforce_max_images`**: Arroja un error e impide la inserción si el vehículo ya tiene 7 imágenes asociadas.
+* **`enforce_max_images`**: Arroja un error e impide la inserción si el vehículo ya tiene 8 imágenes asociadas.
 * **`single_primary_image`**: Si una imagen es marcada como `is_primary = TRUE`, el trigger actualiza todas las demás imágenes del mismo vehículo a `is_primary = FALSE`.
 * **`get_vehicle_by_slug_suffix(suffix)`**: Función RPC que permite buscar un vehículo usando un sufijo de texto (los primeros 8 caracteres de su ID UUID), facilitando el soporte de URLs públicas amigables.

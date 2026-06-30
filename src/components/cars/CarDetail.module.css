@@ -74,6 +74,7 @@
 /* Galería */
 .gallery {
   position: relative;
+  min-width: 0;
 }
 
 .badge {
@@ -127,13 +128,132 @@
   color: #fff;
   font-size: 0.75rem;
   font-weight: 600;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── Imagen con transición fade ─────────────────────────────── */
+.galleryImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 280ms ease;
+}
+
+.galleryImgVisible {
+  opacity: 1;
+}
+
+/* ── Skeleton / spinner mientras carga ──────────────────────── */
+.imgSkeleton {
+  position: absolute;
+  inset: 0;
+  background: #0b0f18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.imgSkeletonSpinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: var(--color-red);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+/* ── Estado de error de imagen ──────────────────────────────── */
+.imgErrorState {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #64748b;
+  font-size: 0.8125rem;
+  background: #0d1424;
+}
+
+/* ── Botones prev / next ────────────────────────────────────── */
+.galleryNav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #ffffff;
+  font-size: 1.75rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease;
+  padding: 0;
+  padding-bottom: 2px; /* Corrección visual del carácter ‹ › */
+}
+
+.galleryNav:hover {
+  background: rgba(0, 0, 0, 0.75);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.galleryPrev {
+  left: 12px;
+}
+
+.galleryNext {
+  right: 12px;
+}
+
+/* ── Indicadores de posición (dots) ─────────────────────────── */
+.galleryDots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 10px;
+  margin-bottom: 2px;
+}
+
+.galleryDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 200ms ease, transform 200ms ease;
+}
+
+.galleryDot:hover {
+  background: rgba(255,255,255,0.5);
+}
+
+.galleryDotActive {
+  background: var(--color-red);
+  transform: scale(1.25);
 }
 
 .thumbnails {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding-bottom: 4px;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
 }
 
 .thumb {
@@ -155,6 +275,7 @@
   border-radius: 12px;
   padding: 28px;
   box-shadow: var(--shadow-card);
+  min-width: 0;
 }
 
 .brand {
@@ -200,7 +321,7 @@
 /* Specs */
 .specsGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 1px;
   background: var(--color-border-light);
   border: 1px solid var(--color-border-light);
@@ -368,4 +489,337 @@
 
 .lightboxNav:hover { background: rgba(255,255,255,0.25); }
 .lightboxPrev { left: 20px; }
-.lightboxNext { right: 20px; }
+.lightboxNext { right: 20px; }
+
+/* ─── Barra administrativa (solo admins) ─────────────────────── */
+.adminBar {
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 100;
+  background: #0d1424;
+  border-bottom: 1px solid rgba(230, 51, 41, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  padding-inline: max(24px, env(safe-area-inset-left, 24px), env(safe-area-inset-right, 24px));
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.adminBarLeft {
+  display: flex;
+  align-items: center;
+}
+
+.adminBarLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-red);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.adminBarActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.adminBarBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 7px;
+  color: #e2e8f0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.adminBarBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.adminBarBtnDanger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(230, 51, 41, 0.1);
+  border: 1px solid rgba(230, 51, 41, 0.3);
+  border-radius: 7px;
+  color: #fca5a5;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.adminBarBtnDanger:hover {
+  background: rgba(230, 51, 41, 0.2);
+  border-color: rgba(230, 51, 41, 0.5);
+  color: #ffffff;
+}
+
+/* ─── Modal de archivado (reutiliza el patrón del dashboard) ──── */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: #111827;
+  border: 1px solid #1e2d40;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: #ffffff;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.modalCloseBtn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color 150ms ease;
+  padding: 4px;
+}
+
+.modalCloseBtn:hover {
+  color: #ffffff;
+}
+
+.modalBody {
+  font-size: 0.9375rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.modalVehicleName {
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 1.0625rem;
+  background: #1a2332;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #1e2d40;
+  text-align: center;
+}
+
+.modalInput {
+  background: #0b0f18;
+  border: 1px solid #1e2d40;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #ffffff;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+}
+
+.modalInput:focus {
+  outline: none;
+  border-color: var(--color-red);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancelBtn {
+  padding: 10px 18px;
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #1e2d40;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+  font-size: 0.875rem;
+  font-family: var(--font-body);
+}
+
+.cancelBtn:hover:not(:disabled) {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.confirmBtn {
+  padding: 10px 18px;
+  background: var(--color-red);
+  color: #ffffff;
+  border: 1px solid var(--color-red);
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 150ms ease;
+  font-size: 0.875rem;
+  font-family: var(--font-body);
+}
+
+.confirmBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.confirmBtn:not(:disabled):hover {
+  background: #c92a21;
+  border-color: #c92a21;
+}
+
+/* ─── Responsive Media Queries ──────────────────────────────── */
+
+@media (max-width: 768px) {
+  .main {
+    padding-top: calc(var(--nav-height) + 16px);
+    padding-bottom: 32px;
+  }
+
+  .breadcrumb {
+    margin-bottom: 16px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .info {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .adminBar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 7px 14px;
+    padding-inline: max(14px, env(safe-area-inset-left, 14px), env(safe-area-inset-right, 14px));
+    gap: 8px;
+  }
+
+  .adminBarActions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .adminBarBtn,
+  .adminBarBtnDanger {
+    justify-content: center;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    gap: 4px;
+  }
+
+  .lightboxClose {
+    top: max(16px, env(safe-area-inset-top, 16px));
+    right: max(16px, env(safe-area-inset-right, 16px));
+  }
+
+  .lightboxNav {
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+  }
+
+  .lightboxPrev {
+    left: max(10px, env(safe-area-inset-left, 10px));
+  }
+
+  .lightboxNext {
+    right: max(10px, env(safe-area-inset-right, 10px));
+  }
+}
+
+@media (max-width: 480px) {
+  .info {
+    padding: 16px;
+  }
+
+  .model {
+    font-size: 1.375rem;
+  }
+
+  .price {
+    font-size: 1.5rem;
+  }
+
+  .modalContent {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .modalTitle {
+    font-size: 1.0625rem;
+  }
+}
+
+/* ── Responsive: botones de navegación de galería ─────────── */
+@media (max-width: 640px) {
+  /* Botones más grandes para touch */
+  .galleryNav {
+    width: 48px;
+    height: 48px;
+    font-size: 2rem;
+  }
+
+  .galleryPrev {
+    left: 8px;
+  }
+
+  .galleryNext {
+    right: 8px;
+  }
+
+  /* Dots ligeramente más grandes */
+  .galleryDot {
+    width: 9px;
+    height: 9px;
+  }
+}
+
+

@@ -360,3 +360,10 @@
   .heroCtas { flex-direction: column; }
   .btnPrimary, .btnSecondary { width: 100%; text-align: center; }
 }
+
+@media (max-width: 640px) {
+  .carGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}

@@ -1,11 +1,10 @@
 // src/pages/Contacto/Contacto.tsx
-import { useState,type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import styles from './Contacto.module.css';
 
 const WHATSAPP_NUMBERS = [
   { label: '+56 9 4038 5580', href: 'https://wa.me/56940385580' },
-  { label: '+56 9 7737 0010', href: 'https://wa.me/56977370010' },
-  { label: '+56 9 5219 1321', href: 'https://wa.me/56952191321' },
+
 ];
 
 type FormState = { name: string; phone: string; message: string };
@@ -50,12 +49,12 @@ export default function Contacto() {
             <div className={styles.contactGroup}>
               <span className={styles.groupLabel}>INSTAGRAM</span>
               <a
-                href="https://www.instagram.com/tdimotors"
+                href="https://www.instagram.com/tdi_motors"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.contactLink}
               >
-                @tdimotors
+                @tdi_motors
               </a>
             </div>
 

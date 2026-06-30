@@ -1,6 +1,6 @@
 // src/pages/Admin/AdminDashboard.tsx
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAdminCars } from '../../hooks/useCars';
 import { signOut } from '../../lib/auth';
 import { useAuth } from '../../hooks/useAuth';
@@ -18,7 +18,43 @@ export default function AdminDashboard() {
   const [isFormActive, setIsFormActive] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [filter, setFilter] = useState<'active' | 'reserved' | 'sold' | 'archived' | 'all'>('active');
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const highlightId = searchParams.get('highlight');
+  const highlightRowRef = useRef<HTMLTableRowElement | null>(null);
+
+  // Scroll y resaltar fila al cargar si viene ?highlight=
+  const editParam = searchParams.get('edit');
+  const filterParam = searchParams.get('filter') as 'active' | 'reserved' | 'sold' | 'archived' | 'all' | null;
+  useEffect(() => {
+    // Aplicar filtro desde query param (ej. ?filter=all)
+    if (filterParam && ['active', 'reserved', 'sold', 'archived', 'all'].includes(filterParam)) {
+      setFilter(filterParam);
+    }
+    if (highlightId && highlightRowRef.current) {
+      highlightRowRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    // Si viene ?edit=1, abrir formulario del vehículo resaltado
+    if (highlightId && editParam === '1' && cars.length > 0) {
+      const targetCar = cars.find((c) => c.id === highlightId);
+      if (targetCar) {
+        setSelectedCar(targetCar);
+        setIsFormActive(true);
+      }
+    }
+  }, [highlightId, editParam, filterParam, cars]);
+
+  // Limpiar query params de la URL después de procesarlos
+  // para que al navegar directamente a /admin no persista el highlight
+  useEffect(() => {
+    if (highlightId || filterParam || editParam) {
+      const timer = setTimeout(() => {
+        navigate('/admin', { replace: true });
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Estados para el Modal de Archivado
   const [archiveTarget, setArchiveTarget] = useState<Car | null>(null);
@@ -179,7 +215,7 @@ export default function AdminDashboard() {
     archived: cars.filter((c) => c.status === 'archived').length,
   };
 
-  // Filtrar vehículos a mostrar
+  // Filtrar vehículos por tab
   const filteredCars = cars.filter((car) => {
     if (filter === 'active') return car.status === 'available';
     if (filter === 'reserved') return car.status === 'reserved';
@@ -187,6 +223,20 @@ export default function AdminDashboard() {
     if (filter === 'archived') return car.status === 'archived';
     return car.status !== 'archived'; // 'all'
   });
+
+  // Filtrar además por búsqueda de texto
+  const displayedCars = searchQuery.trim() === ''
+    ? filteredCars
+    : filteredCars.filter((car) => {
+        const q = searchQuery.toLowerCase();
+        return (
+          car.brand.toLowerCase().includes(q) ||
+          car.model.toLowerCase().includes(q) ||
+          String(car.year).includes(q) ||
+          car.plate.toLowerCase().includes(q) ||
+          (car.vehicle_type ?? '').toLowerCase().includes(q)
+        );
+      });
 
   if (isFormActive) {
     return (
@@ -281,6 +331,31 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Buscador rápido */}
+        <div className={styles.searchBar}>
+          <svg className={styles.searchIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="text"
+            className={styles.searchInput}
+            placeholder="Buscar por marca, modelo, año, patente o tipo..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              className={styles.searchClear}
+              onClick={() => setSearchQuery('')}
+              title="Limpiar búsqueda"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
         {/* Filtros de Inventario (Secciones/Tabs) */}
         <div className={styles.filterTabs}>
           <button
@@ -331,9 +406,9 @@ export default function AdminDashboard() {
             <div className={styles.emptyState} style={{ color: '#fca5a5' }}>
               Error al cargar datos: {error}
             </div>
-          ) : filteredCars.length === 0 ? (
+          ) : displayedCars.length === 0 ? (
             <div className={styles.emptyState}>
-              No hay vehículos registrados en este filtro.
+              {searchQuery.trim() !== '' ? `Sin resultados para "${searchQuery}"` : 'No hay vehículos registrados en este filtro.'}
             </div>
           ) : (
             <div className={styles.tableWrapper}>
@@ -348,10 +423,19 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredCars.map((car) => {
+                  {displayedCars.map((car) => {
                     const primaryImg = getPrimaryImage(car.vehicle_images);
+                    const isHighlighted = car.id === highlightId;
                     return (
-                      <tr key={car.id} style={{ opacity: updatingId === car.id ? 0.6 : 1 }}>
+                      <tr
+                        key={car.id}
+                        ref={isHighlighted ? highlightRowRef : null}
+                        style={{
+                          opacity: updatingId === car.id ? 0.6 : 1,
+                          background: isHighlighted ? 'rgba(230,51,41,0.08)' : undefined,
+                          boxShadow: isHighlighted ? 'inset 0 0 0 2px rgba(230,51,41,0.4)' : undefined,
+                        }}
+                      >
                         <td>
                           <div className={styles.carInfo}>
                             {primaryImg ? (

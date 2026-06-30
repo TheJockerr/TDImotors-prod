@@ -94,8 +94,8 @@ export default function VehicleImages({ vehicleId, images, onChange }: Props) {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    if (images.length + files.length > 7) {
-      setError('Un vehículo puede tener un máximo de 7 imágenes.');
+    if (images.length + files.length > 8) {
+      setError('Un vehículo puede tener un máximo de 8 imágenes.');
       return;
     }
 
@@ -175,11 +175,11 @@ export default function VehicleImages({ vehicleId, images, onChange }: Props) {
 
   return (
     <div className={styles.container}>
-      <label className={styles.uploadText}>Imágenes del Vehículo ({images.length}/7)</label>
+      <label className={styles.uploadText}>Imágenes del Vehículo ({images.length}/8)</label>
       
       {error && <div className={styles.errorMessage}>{error}</div>}
 
-      {images.length < 7 && (
+      {images.length < 8 && (
         <div 
           className={styles.uploadArea}
           onClick={() => !uploading && fileInputRef.current?.click()}

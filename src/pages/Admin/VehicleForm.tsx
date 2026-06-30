@@ -469,14 +469,15 @@ export default function VehicleForm({ car, onSaved, onCancel }: Props) {
               )}
             </div>
           </div>
+        </div>
 
-          <div style={{ marginTop: '24px' }}>
-            <VehicleImages
-              vehicleId={vehicleId}
-              images={images}
-              onChange={setImages}
-            />
-          </div>
+        {/* Sección de imágenes — se reordena debajo en mobile */}
+        <div className={styles.imagesSection}>
+          <VehicleImages
+            vehicleId={vehicleId}
+            images={images}
+            onChange={setImages}
+          />
         </div>
 
         {/* Botones de acción del Formulario */}
