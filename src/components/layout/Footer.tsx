@@ -97,7 +97,7 @@ export default function Footer() {
           <h4 className={styles.colTitle}>Atención</h4>
           <ul className={styles.colList}>
             <li>Lunes a Sábados</li>
-            <li>Las Condes, Santiago</li>
+            <li>Santiago</li>
             <li className={styles.small}>(previa coordinación)</li>
           </ul>
         </div>

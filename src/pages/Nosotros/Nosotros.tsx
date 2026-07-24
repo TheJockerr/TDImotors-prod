@@ -34,7 +34,7 @@ export default function Nosotros() {
           <p className={styles.desc}>
             Somos una automotora 100% online en Santiago especializada en la consignación
             y venta de vehículos. Nos encargamos de toda la gestión comercial y financiamiento
-            para que vendas o compres de forma ágil, segura y transparente. Lunes a Sábados en Las Condes (previa coordinación).
+            para que vendas o compres de forma ágil, segura y transparente. Lunes a Sábados en Santiago (previa coordinación).
           </p>
         </div>
       </section>
