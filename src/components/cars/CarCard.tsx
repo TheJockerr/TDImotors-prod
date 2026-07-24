@@ -17,7 +17,7 @@ function formatMileage(km: number): string {
   return km.toLocaleString('es-CL') + ' km';
 }
 
-const WHATSAPP_BASE = `https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER ?? '56940385580'}?text=`;
+const WHATSAPP_BASE = `https://wa.me/${import.meta.env.VITE_WHATSAPP_NUMBER ?? '56965655135'}?text=`;
 
 export default function CarCard({ car }: Props) {
   const waText = encodeURIComponent(
@@ -60,13 +60,12 @@ export default function CarCard({ car }: Props) {
         )}
         {badge && (
           <span
-            className={`${styles.badge} ${
-              badge === 'OFERTA'
+            className={`${styles.badge} ${badge === 'OFERTA'
                 ? styles.badgeRed
                 : badge === 'CRÉDITO DIRECTO'
-                ? styles.badgeBlue
-                : styles.badgeDark
-            }`}
+                  ? styles.badgeBlue
+                  : styles.badgeDark
+              }`}
           >
             {badge}
           </span>

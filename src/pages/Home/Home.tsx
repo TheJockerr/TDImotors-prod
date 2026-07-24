@@ -1,6 +1,7 @@
 // src/pages/Home/Home.tsx
 import { Link } from 'react-router-dom';
-import { useFeaturedCars, useCars } from '../../hooks/useCars';
+import { useCars } from '../../hooks/useCars';
+import { useMemo } from 'react';
 import CarCard from '../../components/cars/CarCard';
 import styles from './Home.module.css';
 
@@ -41,8 +42,21 @@ const FEATURES = [
 ];
 
 export default function Home() {
-  const { cars: featured, loading } = useFeaturedCars();
-  const { allInventory, allBrands } = useCars();
+  const { allInventory, allBrands, loading } = useCars();
+
+  // Autos con badge (Oferta, Crédito Directo o Recién Llegado) en orden aleatorio
+  const featured = useMemo(() => {
+    const flagged = allInventory.filter(
+      (c) => c.is_featured || c.is_new_arrival || c.is_promotion
+    );
+    // Fisher-Yates shuffle para que cada visita sea distinta
+    const shuffled = [...flagged];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, 6);
+  }, [allInventory]);
 
   // Estado de carga
   if (loading) {
@@ -153,7 +167,7 @@ export default function Home() {
         <section className={styles.featured}>
           <div className="container">
             <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>Autos destacados</h2>
+              <h2 className={styles.sectionTitle}>Autos con oferta y destacados</h2>
               <Link to="/catalogo" className={styles.seeAll}>
                 Ver catálogo completo →
               </Link>
