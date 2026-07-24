@@ -1,6 +1,7 @@
 // src/pages/Admin/VehicleForm.tsx
 import { useState, useEffect } from 'react';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+import { clearCarCache } from '../../lib/carCache';
 import type { Car, VehicleImage, CarFormData } from '../../types/car';
 import VehicleImages from '../../components/admin/VehicleImages';
 import styles from './VehicleForm.module.css';
@@ -183,6 +184,7 @@ export default function VehicleForm({ car, onSaved, onCancel }: Props) {
         if (insertImagesErr) throw insertImagesErr;
       }
 
+      clearCarCache();
       onSaved();
     } catch (err: any) {
       setError(err.message || 'Error al guardar el vehículo.');

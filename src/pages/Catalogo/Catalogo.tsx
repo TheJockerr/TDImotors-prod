@@ -6,13 +6,13 @@ import CarFilter, { type FilterState, DEFAULT_FILTERS } from '../../components/c
 import styles from './Catalogo.module.css';
 
 export default function Catalogo() {
-  const { cars, loading, loadingMore, hasMore, loadMore } = useCars();
+  const { allInventory, allBrands, loading, displayCount, loadMore } = useCars();
   const [filters, setFilters] = useState<FilterState>({ ...DEFAULT_FILTERS });
   const [searchQuery, setSearchQuery] = useState('');
   const [displayQuery, setDisplayQuery] = useState('');
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Debounce de 180ms para no filtrar en cada tecla en inventarios grandes
+  // Debounce de 180ms para no filtrar en cada tecla
   const handleSearch = useCallback((value: string) => {
     setDisplayQuery(value);
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -24,15 +24,9 @@ export default function Catalogo() {
     setSearchQuery('');
   }
 
-  // Marcas únicas de los vehículos cargados
-  const brands = useMemo(() => {
-    const set = new Set(cars.map((c) => c.brand));
-    return Array.from(set).sort();
-  }, [cars]);
-
-  // Filtrado en cliente sobre los datos ya paginados
+  // Filtrado instantáneo sobre todo el inventario en caché
   const filtered = useMemo(() => {
-    return cars.filter((car) => {
+    return allInventory.filter((car) => {
       // ─ Filtros del panel ─
       if (filters.brand !== 'Todos' && car.brand !== filters.brand) return false;
 
@@ -49,7 +43,7 @@ export default function Catalogo() {
 
       if (filters.fuel !== 'Todos' && car.fuel !== filters.fuel) return false;
 
-      // ─ Búsqueda de texto (sin patente) ─
+      // ─ Búsqueda de texto (marca, modelo, año, combustible, tipo) ─
       if (searchQuery.trim() !== '') {
         const q = searchQuery.trim().toLowerCase();
         const match =
@@ -63,7 +57,14 @@ export default function Catalogo() {
 
       return true;
     });
-  }, [cars, filters, searchQuery]);
+  }, [allInventory, filters, searchQuery]);
+
+  // Ítems visibles según el scroll/loadMore
+  const visibleCars = useMemo(() => {
+    return filtered.slice(0, displayCount);
+  }, [filtered, displayCount]);
+
+  const hasMore = visibleCars.length < filtered.length;
 
   return (
     <main className={styles.main}>
@@ -77,7 +78,7 @@ export default function Catalogo() {
                 Todos nuestros autos con documentación al día · Lunes a Sábados
               </p>
             </div>
-            <span className={styles.totalBadge}>{cars.length} vehículos</span>
+            <span className={styles.totalBadge}>{allInventory.length} vehículos</span>
           </div>
 
           {/* Barra de búsqueda */}
@@ -109,10 +110,10 @@ export default function Catalogo() {
           </div>
 
           <CarFilter
-            brands={brands}
+            brands={allBrands}
             filters={filters}
             onChange={setFilters}
-            total={cars.length}
+            total={allInventory.length}
             showing={filtered.length}
           />
         </div>
@@ -143,7 +144,7 @@ export default function Catalogo() {
           ) : (
             <>
               <div className={styles.carGrid}>
-                {filtered.map((car) => (
+                {visibleCars.map((car) => (
                   <CarCard key={car.id} car={car} />
                 ))}
               </div>
@@ -154,16 +155,8 @@ export default function Catalogo() {
                   <button
                     className={styles.loadMoreBtn}
                     onClick={loadMore}
-                    disabled={loadingMore}
                   >
-                    {loadingMore ? (
-                      <>
-                        <span className={styles.loadMoreSpinner} />
-                        Cargando...
-                      </>
-                    ) : (
-                      'Cargar más vehículos'
-                    )}
+                    Cargar más vehículos
                   </button>
                 </div>
               )}

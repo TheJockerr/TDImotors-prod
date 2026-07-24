@@ -5,6 +5,7 @@ import { useAdminCars } from '../../hooks/useCars';
 import { signOut } from '../../lib/auth';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase, getImageUrl, isSupabaseConfigured } from '../../lib/supabase';
+import { clearCarCache } from '../../lib/carCache';
 import type { Car } from '../../types/car';
 import { getPrimaryImage } from '../../types/car';
 import { mockCars } from '../../data/mockCars';
@@ -108,6 +109,7 @@ export default function AdminDashboard() {
       }
       showSuccessNotification('Vehículo archivado correctamente.');
       setArchiveTarget(null);
+      clearCarCache();
       refetch();
     } catch (err: any) {
       alert(`Error al archivar vehículo: ${err.message}`);
@@ -130,6 +132,7 @@ export default function AdminDashboard() {
         carToRestore.status = 'available';
       }
       showSuccessNotification('Vehículo restaurado correctamente.');
+      clearCarCache();
       refetch();
     } catch (err: any) {
       alert(`Error al restaurar vehículo: ${err.message}`);
@@ -175,6 +178,7 @@ export default function AdminDashboard() {
 
       showSuccessNotification('Vehículo eliminado permanentemente.');
       setDeleteTarget(null);
+      clearCarCache();
       refetch();
     } catch (err: any) {
       alert(`Error al eliminar vehículo: ${err.message}`);
@@ -198,6 +202,7 @@ export default function AdminDashboard() {
         const target = mockCars.find((c) => c.id === carId);
         if (target) target[flag] = !currentValue;
       }
+      clearCarCache();
       refetch();
     } catch (err: any) {
       alert(`Error al actualizar estado: ${err.message}`);

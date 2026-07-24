@@ -1,12 +1,13 @@
 // src/hooks/useCars.ts
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { getCarSlug, type Car, type CarCard } from '../types/car';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { mockCars } from '../data/mockCars';
+import { getCachedInventory, setCachedInventory } from '../lib/carCache';
 
 const PAGE_SIZE = 9;
 
-// ─── Campos ligeros para el catálogo (evita traer todo) ──────────
+// ─── Campos ligeros para el catálogo (evita traer campos pesados) ──
 const CATALOG_SELECT = `
   id,
   brand,
@@ -23,95 +24,119 @@ const CATALOG_SELECT = `
   vehicle_images (public_url, is_primary, sort_order)
 `.trim();
 
-// ─── Hook para catálogo con paginación ───────────────────────────
+/**
+ * Helper interno para obtener todo el inventario público con caché.
+ */
+async function fetchFullInventory(): Promise<CarCard[]> {
+  const cached = getCachedInventory();
+  if (cached) {
+    return cached;
+  }
+
+  if (!isSupabaseConfigured) {
+    setCachedInventory(mockCars as CarCard[]);
+    return mockCars as CarCard[];
+  }
+
+  const { data, error } = await supabase!
+    .from('vehicles')
+    .select(CATALOG_SELECT)
+    .in('status', ['available', 'reserved'])
+    .order('is_featured', { ascending: false })
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('[useCars] Error al cargar inventario:', error);
+    return [];
+  }
+
+  const result = (data ?? []) as unknown as CarCard[];
+  setCachedInventory(result);
+  return result;
+}
+
+// ─── Hook para catálogo con caché y filtrado integral ────────────
 export function useCars() {
-  const [cars, setCars] = useState<CarCard[]>([]);
+  const [allInventory, setAllInventory] = useState<CarCard[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(false);
-  const [page, setPage] = useState(0);
+  const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
 
-  const fetchPage = useCallback(async (pageIndex: number, append: boolean) => {
-    if (pageIndex === 0) setLoading(true);
-    else setLoadingMore(true);
+  const fetchInventory = useCallback(async (forceRefresh = false) => {
+    setLoading(true);
+    setError(null);
+    try {
+      if (forceRefresh) {
+        // Ignorar caché si se solicita refresco forzado
+        if (isSupabaseConfigured) {
+          const { data, error: err } = await supabase!
+            .from('vehicles')
+            .select(CATALOG_SELECT)
+            .in('status', ['available', 'reserved'])
+            .order('is_featured', { ascending: false })
+            .order('created_at', { ascending: false });
 
-    // Modo mock
-    if (!isSupabaseConfigured) {
-      await new Promise((r) => setTimeout(r, 200)); // simula latencia
-      const start = pageIndex * PAGE_SIZE;
-      const slice = mockCars.slice(start, start + PAGE_SIZE);
-      setCars((prev) => (append ? [...prev, ...slice] as CarCard[] : slice as CarCard[]));
-      setHasMore(start + PAGE_SIZE < mockCars.length);
+          if (err) throw err;
+          const result = (data ?? []) as unknown as CarCard[];
+          setCachedInventory(result);
+          setAllInventory(result);
+        } else {
+          setAllInventory(mockCars as CarCard[]);
+        }
+      } else {
+        const inventory = await fetchFullInventory();
+        setAllInventory(inventory);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Error al cargar los vehículos.');
+    } finally {
       setLoading(false);
-      setLoadingMore(false);
-      return;
     }
-
-    const from = pageIndex * PAGE_SIZE;
-    const to = from + PAGE_SIZE - 1;
-
-    const { data, error: err, count } = await supabase!
-      .from('vehicles')
-      .select(CATALOG_SELECT, { count: 'exact' })
-      .in('status', ['available', 'reserved'])
-      .order('is_featured', { ascending: false })
-      .order('created_at', { ascending: false })
-      .range(from, to);
-
-    if (err) {
-      setError(err.message);
-    } else {
-      const newCars = (data ?? []) as unknown as CarCard[];
-      setCars((prev) => (append ? [...prev, ...newCars] : newCars));
-      setHasMore((count ?? 0) > from + PAGE_SIZE);
-    }
-    setLoading(false);
-    setLoadingMore(false);
   }, []);
 
   useEffect(() => {
-    fetchPage(0, false);
-  }, [fetchPage]);
+    fetchInventory();
+  }, [fetchInventory]);
+
+  // Lista única de marcas dinámicas basadas en TODO el inventario disponible
+  const allBrands = useMemo(() => {
+    const set = new Set(allInventory.map((c) => c.brand));
+    return Array.from(set).sort();
+  }, [allInventory]);
 
   const loadMore = useCallback(() => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchPage(nextPage, true);
-  }, [page, fetchPage]);
+    setDisplayCount((prev) => prev + PAGE_SIZE);
+  }, []);
 
-  return { cars, loading, loadingMore, error, hasMore, loadMore };
+  return {
+    allInventory,
+    allBrands,
+    loading,
+    error,
+    displayCount,
+    hasMore: displayCount < allInventory.length,
+    loadMore,
+    refetch: () => fetchInventory(true),
+  };
 }
 
-// ─── Hook para vehículos destacados (Home) ───────────────────────
+// ─── Hook para vehículos destacados (Home) con caché ─────────────
 export function useFeaturedCars() {
   const [cars, setCars] = useState<CarCard[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchFeatured() {
-      if (!isSupabaseConfigured) {
-        const featured = mockCars
-          .filter((c) => c.is_new_arrival || c.is_promotion || c.is_featured)
-          .slice(0, 3);
-        setCars(featured as CarCard[]);
-        setLoading(false);
-        return;
-      }
+    async function loadFeatured() {
+      const inventory = await fetchFullInventory();
+      const featured = inventory
+        .filter((c) => c.is_featured || c.is_new_arrival || c.is_promotion)
+        .slice(0, 3);
 
-      const { data } = await supabase!
-        .from('vehicles')
-        .select(CATALOG_SELECT)
-        .in('status', ['available', 'reserved'])
-        .or('is_featured.eq.true,is_new_arrival.eq.true,is_promotion.eq.true')
-        .order('created_at', { ascending: false })
-        .limit(3);
-
-      setCars((data ?? []) as unknown as CarCard[]);
+      setCars(featured);
       setLoading(false);
     }
 
-    fetchFeatured();
+    loadFeatured();
   }, []);
 
   return { cars, loading };
@@ -199,7 +224,7 @@ export function useCarById(id: string) {
   return { car, loading, error };
 }
 
-// ─── Hook para admin: todos los vehículos (sin filtro de status) ─
+// ─── Hook para admin: todos los vehículos ─────────────────────────
 export function useAdminCars() {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
