@@ -28,7 +28,7 @@ export default function Nosotros() {
         <div className="container">
           <span className={styles.tag}>Sobre nosotros</span>
           <h1 className={styles.title}>
-            TDI Motors —<br />
+            TDI Motors -<br />
             Especialistas en Consignaciones y Venta de Autos
           </h1>
           <p className={styles.desc}>
@@ -76,4 +76,4 @@ export default function Nosotros() {
       </section>
     </main>
   );
-}
+}
