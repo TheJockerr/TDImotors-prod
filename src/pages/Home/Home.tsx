@@ -173,7 +173,7 @@ export default function Home() {
               TDI Motors — Venta online, atención personal
             </h2>
             <p className={styles.aboutDesc}>
-              Automotora 100% online con autos seleccionados, documentación al día
+              Automotora 100% online con autos seleccionados, posibilidad de consignar
               y atención directa de Lunes a Sábados en Santiago.
             </p>
           </div>
