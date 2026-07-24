@@ -82,7 +82,8 @@ export interface CarFormData {
 }
 
 // ─── Helper: obtener badge de compatibilidad hacia atrás ─────────
-export function getCarBadge(car: Car | CarCard): 'RECIÉN LLEGADO' | 'OFERTA' | null {
+export function getCarBadge(car: Car | CarCard): 'CRÉDITO DIRECTO' | 'RECIÉN LLEGADO' | 'OFERTA' | null {
+  if (car.is_featured) return 'CRÉDITO DIRECTO';
   if (car.is_new_arrival) return 'RECIÉN LLEGADO';
   if (car.is_promotion) return 'OFERTA';
   return null;

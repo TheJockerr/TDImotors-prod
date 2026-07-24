@@ -59,7 +59,15 @@ export default function CarCard({ car }: Props) {
           </div>
         )}
         {badge && (
-          <span className={`${styles.badge} ${badge === 'OFERTA' ? styles.badgeRed : styles.badgeDark}`}>
+          <span
+            className={`${styles.badge} ${
+              badge === 'OFERTA'
+                ? styles.badgeRed
+                : badge === 'CRÉDITO DIRECTO'
+                ? styles.badgeBlue
+                : styles.badgeDark
+            }`}
+          >
             {badge}
           </span>
         )}

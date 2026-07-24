@@ -113,6 +113,17 @@
   color: #ffffff;
 }
 
+.btnFacebook {
+  background: #1877f2;
+  color: #ffffff;
+}
+
+.btnTiktok {
+  background: #010101;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
 .btnAdmin {
   display: inline-flex;
   align-items: center;

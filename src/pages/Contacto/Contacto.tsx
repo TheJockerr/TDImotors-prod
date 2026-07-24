@@ -4,8 +4,10 @@ import styles from './Contacto.module.css';
 
 const WHATSAPP_NUMBERS = [
   { label: '+56 9 4038 5580', href: 'https://wa.me/56940385580' },
-
 ];
+
+const FACEBOOK_URL = 'https://www.facebook.com/share/1J5pRcCyxb/?mibextid=wwXIfr';
+const TIKTOK_URL = 'https://www.tiktok.com/@tdi_motors?_r=1&_t=ZS-98H8QRgiwFe';
 
 type FormState = { name: string; phone: string; message: string };
 type Status = 'idle' | 'sending' | 'sent' | 'error';
@@ -20,9 +22,10 @@ export default function Contacto() {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    // Construye un mensaje de WhatsApp con los datos del formulario
+    // Construye un mensaje de WhatsApp preconfigurado con datos del formulario
+    const intro = `Hola, estoy interesado/a en consignar mi vehículo.`;
     const text = encodeURIComponent(
-      `Hola, soy ${form.name}.\n\nTeléfono: ${form.phone}\n\n${form.message}`
+      `${intro}\n\nNombre: ${form.name}\nTeléfono: ${form.phone}\n\n${form.message}`
     );
     window.open(`https://wa.me/56940385580?text=${text}`, '_blank');
     setStatus('sent');
@@ -35,7 +38,7 @@ export default function Contacto() {
         <div className={styles.layout}>
           {/* Panel izquierdo — Datos */}
           <div className={styles.infoPanel}>
-            <h1 className={styles.title}>Contáctanos</h1>
+            <h1 className={styles.title}>Consignar mi vehículo</h1>
 
             <div className={styles.contactGroup}>
               <span className={styles.groupLabel}>WHATSAPP</span>
@@ -58,6 +61,30 @@ export default function Contacto() {
               </a>
             </div>
 
+            <div className={styles.contactGroup}>
+              <span className={styles.groupLabel}>FACEBOOK</span>
+              <a
+                href={FACEBOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.contactLink}
+              >
+                TDI Motors
+              </a>
+            </div>
+
+            <div className={styles.contactGroup}>
+              <span className={styles.groupLabel}>TIKTOK</span>
+              <a
+                href={TIKTOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.contactLink}
+              >
+                @tdi_motors
+              </a>
+            </div>
+
             <div className={styles.scheduleCard}>
               <span className={styles.scheduleLabel}>Horario de atención</span>
               <p className={styles.scheduleDays}>Lunes a Sábados</p>
@@ -67,16 +94,16 @@ export default function Contacto() {
 
           {/* Panel derecho — Formulario */}
           <div className={styles.formPanel}>
-            <h2 className={styles.formTitle}>Envíanos un mensaje</h2>
+            <h2 className={styles.formTitle}>Solicitar consignación</h2>
 
             {status === 'sent' ? (
               <div className={styles.successBox}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
-                <p>¡Gracias! Te abrimos WhatsApp con tu mensaje.</p>
+                <p>¡Gracias! Te abrimos WhatsApp con tu solicitud de consignación.</p>
                 <button onClick={() => setStatus('idle')} className={styles.resetBtn}>
-                  Enviar otro mensaje
+                  Enviar otra solicitud
                 </button>
               </div>
             ) : (
@@ -110,13 +137,13 @@ export default function Contacto() {
                 </div>
 
                 <div className={styles.field}>
-                  <label htmlFor="message" className={styles.label}>MENSAJE O CONSULTA</label>
+                  <label htmlFor="message" className={styles.label}>VEHÍCULO / DETALLES</label>
                   <textarea
                     id="message"
                     name="message"
                     value={form.message}
                     onChange={handleChange}
-                    placeholder="Ej: Me interesa el MG ZS MT 1.5 2023..."
+                    placeholder="Ej: Tengo un MG ZS MT 1.5 2023, con 30.000 km. Quisiera saber las condiciones de consignación..."
                     required
                     rows={5}
                     className={styles.textarea}
@@ -124,7 +151,7 @@ export default function Contacto() {
                 </div>
 
                 <button type="submit" className={styles.submitBtn}>
-                  Enviar consulta →
+                  Solicitar consignación →
                 </button>
               </form>
             )}

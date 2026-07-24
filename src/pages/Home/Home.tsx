@@ -15,8 +15,8 @@ const FEATURES = [
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       </svg>
     ),
-    title: 'Documentación al día',
-    desc: 'Papeles en regla verificados antes de publicar.',
+    title: 'Consignaciones y gestión',
+    desc: 'Disponibilidad de consignar y gestionar su vehículo',
   },
   {
     icon: (
@@ -55,7 +55,7 @@ export default function Home() {
         <div className={`${styles.heroInner} container`}>
           <span className={styles.heroPill}>
             <span className={styles.heroPillDot} />
-            Vehículos con documentación al día
+            Consignaciones para venta de vehículos
           </span>
 
           <h1 className={styles.heroTitle}>

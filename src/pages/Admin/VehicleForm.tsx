@@ -404,7 +404,7 @@ export default function VehicleForm({ car, onSaved, onCancel }: Props) {
                 onChange={(e) => setIsFeatured(e.target.checked)}
                 disabled={saving}
               />
-              Destacado
+              Crédito Directo
             </label>
             <label className={styles.checkboxLabel}>
               <input

@@ -497,7 +497,7 @@ export default function AdminDashboard() {
                                 onChange={() => handleToggleFlag(car.id, 'is_featured', car.is_featured)}
                                 disabled={updatingId !== null}
                               />
-                              Destacado
+                              Crédito Directo
                             </label>
                             <label className={styles.checkboxLabel}>
                               <input

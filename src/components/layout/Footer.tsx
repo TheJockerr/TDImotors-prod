@@ -2,8 +2,10 @@
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
 
-const WHATSAPP_NUMBERS = ['+56 9 4038 5580'];
-const WHATSAPP_PRIMARY = '56940385580';
+const WHATSAPP_NUMBERS = ['+56 9 6565 5135'];
+const WHATSAPP_PRIMARY = '56965655135';
+const FACEBOOK_URL = 'https://www.facebook.com/share/1J5pRcCyxb/?mibextid=wwXIfr';
+const TIKTOK_URL = 'https://www.tiktok.com/@tdi_motors?_r=1&_t=ZS-98H8QRgiwFe';
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -37,6 +39,22 @@ export default function Footer() {
             >
               Instagram
             </a>
+            <a
+              href={FACEBOOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${styles.socialBtn} ${styles.fb}`}
+            >
+              Facebook
+            </a>
+            <a
+              href={TIKTOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${styles.socialBtn} ${styles.tt}`}
+            >
+              TikTok
+            </a>
           </div>
         </div>
 
@@ -47,7 +65,7 @@ export default function Footer() {
             <li><Link to="/">Inicio</Link></li>
             <li><Link to="/catalogo">Catálogo</Link></li>
             <li><Link to="/nosotros">Nosotros</Link></li>
-            <li><Link to="/contacto">Contacto</Link></li>
+            <li><Link to="/contacto">Consignaciones</Link></li>
           </ul>
         </div>
 
@@ -62,7 +80,15 @@ export default function Footer() {
                 </a>
               </li>
             ))}
-            <li>@tdi_motors</li>
+            <li>
+              <a href="https://www.instagram.com/tdi_motors" target="_blank" rel="noopener noreferrer">@tdi_motors (IG)</a>
+            </li>
+            <li>
+              <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer">TDI Motors (FB)</a>
+            </li>
+            <li>
+              <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer">@tdi_motors (TK)</a>
+            </li>
           </ul>
         </div>
 

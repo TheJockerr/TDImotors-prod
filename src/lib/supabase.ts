@@ -81,29 +81,16 @@ export { supabase };
 // ─── Helpers de imágenes ─────────────────────────────────────────
 
 /**
- * Construye la URL de imagen transformada por Supabase Storage.
- * Supabase convierte automáticamente a WebP cuando el cliente lo soporta.
+ * Devuelve la URL pública directa de Supabase Storage.
+ * La transformación de imágenes (/render/image/) requiere el plan Pro de Supabase
+ * y no está disponible en el plan Free (devuelve 403 FeatureNotEnabled).
  *
  * @param publicUrl  URL pública original de Supabase Storage
- * @param size       'thumbnail' | 'medium' | 'full'
+ * @param size       'thumbnail' | 'medium' | 'full' (ignorado, se usa la URL directa)
  */
-export function getImageUrl(publicUrl: string | null | undefined, size: 'thumbnail' | 'medium' | 'full' = 'medium'): string {
+export function getImageUrl(publicUrl: string | null | undefined, _size: 'thumbnail' | 'medium' | 'full' = 'medium'): string {
   if (!publicUrl) return '';
-  if (size === 'full') return publicUrl;
-
-  // Supabase Storage Image Transformation
-  // Reemplaza /storage/v1/object/public/ por /storage/v1/render/image/public/
-  const transformBase = publicUrl.replace(
-    '/storage/v1/object/public/',
-    '/storage/v1/render/image/public/'
-  );
-
-  const params =
-    size === 'thumbnail'
-      ? 'width=400&height=280&resize=cover&format=webp&quality=75'
-      : 'width=800&height=560&resize=cover&format=webp&quality=85';
-
-  return `${transformBase}?${params}`;
+  return publicUrl;
 }
 
 /**
