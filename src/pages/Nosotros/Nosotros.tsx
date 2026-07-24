@@ -3,20 +3,20 @@ import styles from './Nosotros.module.css';
 
 const VALUES = [
   {
-    title: 'Documentación al día',
-    desc: 'Cada auto que publicamos tiene sus papeles verificados y en regla. Sin sorpresas.',
+    title: 'Consignación transparente',
+    desc: 'Gestionamos la venta de tu auto de principio a fin, promocionándolo en nuestros canales para lograr la mejor venta.',
   },
   {
     title: 'Atención directa',
-    desc: 'Hablás directo con el dueño, sin intermediarios. Respuesta en menos de 1 hora por WhatsApp.',
+    desc: 'Trato personalizado sin intermediarios. Respuesta en menos de 1 hora por WhatsApp para gestionar tu consignación o compra.',
   },
   {
     title: 'Financiamiento gestionado',
-    desc: 'Gestionamos crédito con diversas instituciones. También aceptamos tarjeta y part payment.',
+    desc: 'Facilitamos la venta ofreciendo a los compradores opciones de crédito automotriz, pago con tarjeta y part payment.',
   },
   {
-    title: 'Autos seleccionados',
-    desc: 'Trabajamos solo con vehículos que cumplan nuestros estándares de estado y documentación.',
+    title: 'Vehículos seleccionados',
+    desc: 'Trabajamos con un catálogo de calidad garantizando inspección y óptimas condiciones en cada modelo.',
   },
 ];
 
@@ -29,12 +29,12 @@ export default function Nosotros() {
           <span className={styles.tag}>Sobre nosotros</span>
           <h1 className={styles.title}>
             TDI Motors —<br />
-            Venta online, atención personal
+            Especialistas en Consignaciones y Venta de Autos
           </h1>
           <p className={styles.desc}>
-            Somos una automotora 100% online con base en Santiago. Nos especializamos en
-            autos usados seleccionados con documentación al día, atención directa y financiamiento
-            gestionado. Lunes a Sábados, en Las Condes (previa coordinación).
+            Somos una automotora 100% online en Santiago especializada en la consignación
+            y venta de vehículos. Nos encargamos de toda la gestión comercial y financiamiento
+            para que vendas o compres de forma ágil, segura y transparente. Lunes a Sábados en Las Condes (previa coordinación).
           </p>
         </div>
       </section>
@@ -57,13 +57,13 @@ export default function Nosotros() {
       {/* Cómo funciona */}
       <section className={styles.how}>
         <div className="container">
-          <h2 className={styles.howTitle}>¿Cómo funciona?</h2>
+          <h2 className={styles.howTitle}>¿Cómo funciona la consignación?</h2>
           <div className={styles.steps}>
             {[
-              { num: '01', title: 'Revisa el catálogo', desc: 'Explora todos nuestros vehículos disponibles con fotos, especificaciones y precio.' },
-              { num: '02', title: 'Contáctanos por WhatsApp', desc: 'Escríbenos directamente. Te respondemos en menos de 1 hora de Lunes a Sábados.' },
-              { num: '03', title: 'Coordinamos una visita', desc: 'Agendamos para que puedas ver el auto en Las Condes, Santiago.' },
-              { num: '04', title: 'Gestionamos el financiamiento', desc: 'Si necesitas crédito, tarjeta o part payment, lo gestionamos por ti.' },
+              { num: '01', title: 'Solicita tu consignación', desc: 'Envíanos la información de tu vehículo por la web o directo por WhatsApp.' },
+              { num: '02', title: 'Evaluación y estrategia', desc: 'Revisamos tu vehículo y acordamos el precio y condiciones de venta.' },
+              { num: '03', title: 'Publicación y difusión', desc: 'Promocionamos tu auto en nuestro catálogo online y redes sociales.' },
+              { num: '04', title: 'Gestión y venta final', desc: 'Gestionamos compradores, opciones de financiamiento y concretamos la venta.' },
             ].map(({ num, title, desc }) => (
               <div key={num} className={styles.step}>
                 <span className={styles.stepNum}>{num}</span>
@@ -76,4 +76,4 @@ export default function Nosotros() {
       </section>
     </main>
   );
-}
+}
