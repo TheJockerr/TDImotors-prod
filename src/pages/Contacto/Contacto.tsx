@@ -27,7 +27,7 @@ export default function Contacto() {
     const text = encodeURIComponent(
       `${intro}\n\nNombre: ${form.name}\nTeléfono: ${form.phone}\n\n${form.message}`
     );
-    window.open(`https://wa.me/56940385580?text=${text}`, '_blank');
+    window.open(`https://wa.me/56965655135?text=${text}`, '_blank');
     setStatus('sent');
     setForm({ name: '', phone: '', message: '' });
   }
