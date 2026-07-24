@@ -20,7 +20,7 @@ export default function Footer() {
           </Link>
           <p className={styles.tagline}>
             Venta de autos usados certificados en Santiago.
-            <br />Documentación al día · Financiamiento gestionado.
+            <br />Consignaciones y ventas · Financiamiento gestionado.
           </p>
           <div className={styles.socials}>
             <a
@@ -105,8 +105,8 @@ export default function Footer() {
 
       <div className={styles.bottom}>
         <div className="container">
-          <span>© {year} TDI Motors — tdimotors.cl</span>
-          <span className={styles.bottomRight}> - Santiago -Chile</span>
+          <span>© {year} TDI Motors - tdimotors.cl</span>
+          <span className={styles.bottomRight}> - Santiago - Chile - Desarrollado por Makinova Devs 🔥 | <a href="https://descchile.cl" target="_blank">descchile.cl</a></span>
         </div>
       </div>
     </footer>
