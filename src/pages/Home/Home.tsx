@@ -5,7 +5,7 @@ import CarCard from '../../components/cars/CarCard';
 import styles from './Home.module.css';
 
 
-const WHATSAPP_NUMBER = '56940385580';
+const WHATSAPP_NUMBER = '56965655135';
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 const FEATURES = [
