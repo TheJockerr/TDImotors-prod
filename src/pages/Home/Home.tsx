@@ -1,6 +1,6 @@
 // src/pages/Home/Home.tsx
 import { Link } from 'react-router-dom';
-import { useFeaturedCars } from '../../hooks/useCars';
+import { useFeaturedCars, useCars } from '../../hooks/useCars';
 import CarCard from '../../components/cars/CarCard';
 import styles from './Home.module.css';
 
@@ -42,6 +42,7 @@ const FEATURES = [
 
 export default function Home() {
   const { cars: featured, loading } = useFeaturedCars();
+  const { allInventory, allBrands } = useCars();
 
   // Estado de carga
   if (loading) {
@@ -86,7 +87,8 @@ export default function Home() {
           <div className={styles.stats}>
             <div className={styles.stat}>
               <span className={styles.statNum}>
-                30<span className={styles.statPlus}>+</span>
+                {allInventory.length > 0 ? allInventory.length : '8'}
+                <span className={styles.statPlus}>+</span>
               </span>
               <span className={styles.statLabel}>Autos disponibles</span>
             </div>
@@ -95,19 +97,21 @@ export default function Home() {
 
             <div className={styles.stat}>
               <span className={styles.statNum}>
-                100<span className={styles.statPct}>%</span>
+                &lt;1<span className={styles.statPct}>h</span>
               </span>
-              <span className={styles.statLabel}>Documentación al día</span>
+              <span className={styles.statLabel}>Atención por WhatsApp</span>
             </div>
 
             <div className={styles.statDivider} />
 
             <div className={styles.stat}>
               <span className={styles.statNum}>
-                4 <span className={styles.statSub}>marcas</span>
+                {allBrands.length > 0 ? allBrands.length : '4'} <span className={styles.statSub}>marcas</span>
               </span>
               <span className={styles.statLabel}>
-                MG · Kia · Suzuki · Hyundai
+                {allBrands.length > 0
+                  ? allBrands.slice(0, 4).join(' · ')
+                  : 'MG · Kia · Suzuki · Hyundai'}
               </span>
             </div>
           </div>
