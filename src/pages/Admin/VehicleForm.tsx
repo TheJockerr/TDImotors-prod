@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import { clearCarCache } from '../../lib/carCache';
-import type { Car, VehicleImage, CarFormData } from '../../types/car';
+import type { Car, VehicleImage } from '../../types/car';
 import VehicleImages from '../../components/admin/VehicleImages';
 import styles from './VehicleForm.module.css';
 

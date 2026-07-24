@@ -16,13 +16,16 @@ export default defineConfig({
     // Reducir el tamaño del bundle dividiendo en chunks
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Vendor chunk: React + React DOM
-          'vendor-react': ['react', 'react-dom'],
-          // Router en chunk separado
-          'vendor-router': ['react-router-dom'],
-          // Supabase en chunk separado (carga en inicio)
-          'vendor-supabase': ['@supabase/supabase-js'],
+        manualChunks(id) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/react-router-dom')) {
+            return 'vendor-router';
+          }
+          if (id.includes('node_modules/@supabase')) {
+            return 'vendor-supabase';
+          }
         },
       },
     },

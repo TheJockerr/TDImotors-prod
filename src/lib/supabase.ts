@@ -63,10 +63,10 @@ export interface Database {
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
-let supabase: SupabaseClient<Database> | null = null;
+let supabase: SupabaseClient<any> | null = null;
 
 if (supabaseUrl && supabaseAnonKey) {
-  supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  supabase = createClient<any>(supabaseUrl, supabaseAnonKey, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,

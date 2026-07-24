@@ -360,9 +360,9 @@ interface GalleryProps {
   setImgLoaded: (v: boolean) => void;
   imgError: boolean;
   setImgError: (v: boolean) => void;
-  galleryRef: React.RefObject<HTMLDivElement>;
-  touchStartX: React.MutableRefObject<number | null>;
-  touchStartY: React.MutableRefObject<number | null>;
+  galleryRef: React.RefObject<HTMLDivElement | null>;
+  touchStartX: React.RefObject<number | null>;
+  touchStartY: React.RefObject<number | null>;
   goNext: (total: number) => void;
   goPrev: (total: number) => void;
   badge: string | null;
