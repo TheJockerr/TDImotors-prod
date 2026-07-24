@@ -31,8 +31,8 @@ export default defineConfig({
     },
     // Alerta si un chunk supera 500KB
     chunkSizeWarningLimit: 500,
-    // Minificación activa
-    minify: 'esbuild',
+    // Minificación activa por defecto en producción
+    minify: true,
     // Source maps en producción para debugging (Vercel los oculta)
     sourcemap: false,
   },
