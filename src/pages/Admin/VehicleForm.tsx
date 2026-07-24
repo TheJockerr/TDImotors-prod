@@ -1,5 +1,5 @@
 // src/pages/Admin/VehicleForm.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import { clearCarCache } from '../../lib/carCache';
 import type { Car, VehicleImage, CarFormData } from '../../types/car';
@@ -26,6 +26,9 @@ interface Props {
 }
 
 export default function VehicleForm({ car, onSaved, onCancel }: Props) {
+  const formContainerRef = useRef<HTMLDivElement>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
+
   // Generar UUID si es nuevo, o usar el ID del auto a editar
   const [vehicleId] = useState(() => car?.id ?? crypto.randomUUID());
   
@@ -55,6 +58,20 @@ export default function VehicleForm({ car, onSaved, onCancel }: Props) {
   // Estados de control de la UI
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Muestra el error y realiza scroll automático hacia él
+  function triggerError(msg: string) {
+    setError(msg);
+    setTimeout(() => {
+      if (errorRef.current) {
+        errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (formContainerRef.current) {
+        formContainerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 50);
+  }
 
   // Inicializar campos si estamos editando
   useEffect(() => {
@@ -97,15 +114,19 @@ export default function VehicleForm({ car, onSaved, onCancel }: Props) {
     e.preventDefault();
     setError(null);
 
-    // Validar mínimo 1 imagen
-    if (images.length === 0) {
-      setError('Debes agregar al menos 1 imagen del vehículo.');
-      return;
-    }
+    // Validar exhaustivamente todos los campos requeridos
+    const missing: string[] = [];
+    if (!brand.trim()) missing.push('Marca');
+    if (!model.trim()) missing.push('Modelo');
+    if (!year || Number(year) < 1900 || Number(year) > new Date().getFullYear() + 2) missing.push('Año (válido)');
+    if (!price || Number(price) <= 0) missing.push('Precio (mayor a $0)');
+    if (mileage === undefined || mileage === null || Number(mileage) < 0) missing.push('Kilometraje');
+    if (!plate.trim()) missing.push('Patente');
+    if (!vehicleType) missing.push('Tipo de vehículo');
+    if (images.length === 0) missing.push('Imágenes (al menos 1)');
 
-    // Validar tipo de vehículo seleccionado
-    if (!vehicleType) {
-      setError('Debes seleccionar un tipo de vehículo.');
+    if (missing.length > 0) {
+      triggerError(`Por favor completa los siguientes campos faltantes: ${missing.join(', ')}.`);
       return;
     }
 
@@ -187,14 +208,41 @@ export default function VehicleForm({ car, onSaved, onCancel }: Props) {
       clearCarCache();
       onSaved();
     } catch (err: any) {
-      setError(err.message || 'Error al guardar el vehículo.');
+      triggerError(err.message || 'Error al guardar el vehículo.');
     } finally {
       setSaving(false);
     }
   }
 
+  const renderErrorBanner = () => error && (
+    <div
+      ref={errorRef}
+      style={{
+        background: 'rgba(239, 68, 68, 0.15)',
+        color: '#f87171',
+        border: '1px solid var(--color-red)',
+        padding: '14px 18px',
+        borderRadius: '8px',
+        marginBottom: '20px',
+        fontSize: '0.90rem',
+        fontWeight: 600,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        scrollMarginTop: '120px',
+      }}
+    >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ flexShrink: 0 }}>
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+      <span>{error}</span>
+    </div>
+  );
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={formContainerRef}>
       <div className={styles.header}>
         <h2 className={styles.title}>
           {car ? `Editar: ${car.brand} ${car.model}` : 'Registrar Nuevo Vehículo'}
@@ -204,9 +252,9 @@ export default function VehicleForm({ car, onSaved, onCancel }: Props) {
         </button>
       </div>
 
-      {error && <div className={styles.cancelBtn} style={{ background: 'rgba(239,68,68,0.1)', color: '#fca5a5', border: '1px solid var(--color-red)' }}>{error}</div>}
+      {renderErrorBanner()}
 
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form onSubmit={handleSubmit} className={styles.form} noValidate>
         {/* Columna Izquierda: Información Principal */}
         <div className={styles.leftCol}>
           <h3 className={styles.sectionTitle}>Datos del Vehículo</h3>
@@ -481,6 +529,8 @@ export default function VehicleForm({ car, onSaved, onCancel }: Props) {
             onChange={setImages}
           />
         </div>
+
+        {renderErrorBanner()}
 
         {/* Botones de acción del Formulario */}
         <div className={styles.formActions}>
