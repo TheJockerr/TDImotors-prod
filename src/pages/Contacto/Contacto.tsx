@@ -3,7 +3,7 @@ import { useState, type FormEvent } from 'react';
 import styles from './Contacto.module.css';
 
 const WHATSAPP_NUMBERS = [
-  { label: '+56 9 4038 5580', href: 'https://wa.me/56940385580' },
+  { label: '+56 9 6565 5135', href: 'https://wa.me/56965655135' },
 ];
 
 const FACEBOOK_URL = 'https://www.facebook.com/share/1J5pRcCyxb/?mibextid=wwXIfr';
