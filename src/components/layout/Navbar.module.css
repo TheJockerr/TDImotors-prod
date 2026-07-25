@@ -150,10 +150,17 @@
   height: 36px;
   margin-left: auto;
   padding: 4px;
+  /* Fix Safari/WebKit: reset button appearance para que flex funcione */
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .hamburger span {
   display: block;
+  width: 100%; /* Fix Safari iOS 13/14: los span vacíos no expanden sin width explícito */
   height: 2px;
   background: var(--color-text-on-dark);
   border-radius: 2px;
